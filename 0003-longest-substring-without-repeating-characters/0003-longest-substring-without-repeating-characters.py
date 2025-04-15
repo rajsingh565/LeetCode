@@ -1,15 +1,16 @@
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
-        sett = set()
-        result = 0
-        i = 0
+        map = [-1] * 256  # Array to store last seen indices
+        length, right, left = 0, 0, 0
+        n = len(s)
 
-        for j in range(len(s)):
-             while s[j] in sett:
-                sett.remove(s[i])
-                i += 1
-                 
-             sett.add(s[j])
-             result = max(result, j - i + 1)
-        
-        return result
+        while right < n:
+            # If the character has been seen, adjust the left pointer
+            if map[ord(s[right])] != -1:
+                left = max(map[ord(s[right])] + 1, left)
+            # Update the last seen index
+            map[ord(s[right])] = right
+            # Calculate the length of the current window
+            length = max(length, right - left + 1)
+            right += 1
+        return length
